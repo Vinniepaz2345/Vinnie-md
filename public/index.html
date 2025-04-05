@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WhatsApp Bot Pairing</title>
+</head>
+<body>
+  <h1>Generate Pairing Code</h1>
+  <input type="text" id="phone" placeholder="Enter phone number" />
+  <button onclick="generate()">Generate</button>
+  <div id="result"></div>
+
+  <script>
+    async function generate() {
+      const phone = document.getElementById('phone').value;
+      const res = await fetch('/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone })
+      });
+      const data = await res.json();
+      if (data.pairingCode) {
+        document.getElementById('result').innerHTML = `
+          Pairing Code: <strong>${data.pairingCode}</strong><br>
+          Session ID: <strong>${data.sessionId}</strong>
+        `;
+      } else {
+        document.getElementById('result').innerText = 'Error generating code.';
+      }
+    }
+  </script>
+</body>
+</html>
